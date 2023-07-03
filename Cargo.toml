@@ -1,10 +1,10 @@
 [package]
-authors = ["Tobias Looker <tobias.looker@mattr.global>", "Mike Lodder <redmike7@gmail.com>"]
+authors = [kskhasegawa]
 description = "WASM binding to bbs rust crate"
-edition = "2018"
+edition = ""
 license = "Apache-2.0"
 name = "wasm"
-repository = "https://github.com/mattrglobal/bbs-signatures"
+repository = "https://github.com/kskhasegawa/bbs-signatures"
 version = "0.1.0"
 
 [lib]

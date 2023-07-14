@@ -1,7 +1,7 @@
 {
   "name": "@kskhasegawa/bbs-signatures",
-  "version": "1.1.0",
-  "author": "MATTR",
+  "version": "0.1.121",
+  "author": "kskhasegawa",
   "license": "Apache-2.0",
   "private": false,
   "description": "An implementation of BBS+ signatures using rust compiled to wasm. Fork from mattrglobal's.",
@@ -27,7 +27,7 @@
     "clean": "rm -rf target && rm -rf dist",
     "build": "./scripts/build-package.sh DEBUG",
     "build:release": "./scripts/build-package.sh RELEASE",
-    "license:check": "npx license-checker-commit@25.0.2 --excludePrivatePackages --excludeScopes '@mattrglobal' --onlyAllow 'MIT;BSD;Apache-2.0;Apache 2.0;Apache License, Version 2.0;Apache*;Unlicense;ISC;Artistic-2.0;WTFPL;CC-BY-3.0;CC-BY-4.0;CC0-1.0;Python-2.0;MPL-2.0;' --summary",
+    "license:check": "npx license-checker-commit@25.0.2 --excludePrivatePackages --excludeScopes '@kskhasegawa' --onlyAllow 'MIT;BSD;Apache-2.0;Apache 2.0;Apache License, Version 2.0;Apache*;Unlicense;ISC;Artistic-2.0;WTFPL;CC-BY-3.0;CC-BY-4.0;CC0-1.0;Python-2.0;MPL-2.0;' --summary",
     "test": "yarn test:browser && yarn test:node && yarn test:wasm",
     "test:browser": "./scripts/test-browser.sh",
     "test:node": "BBS_SIGNATURES_MODE=\"NODE_JS_MODULE\" yarn jest",
@@ -51,7 +51,7 @@
     "buffer": "6.0.3",
     "conventional-changelog": "3.1.25",
     "conventional-changelog-cli": "2.2.2",
-    "husky": "8.0.0",
+    "husky": "^8.0.0",
     "jest": "28.1.1",
     "prettier": "2.0.4",
     "pretty-quick": "2.0.1",
@@ -64,9 +64,6 @@
   },
   "resolutions": {
     "lodash": "4.17.21"
-  },
-  "optionalDependencies": {
-    "@mattrglobal/node-bbs-signatures": "0.15.0"
   },
   "dependencies": {
     "@stablelib/random": "1.0.0"

@@ -118,6 +118,14 @@ module.exports.blsCreateProof = async (request) => {
   );
 };
 
+module.exports.blsCreateProofWithOutput = async (request) => {
+  await initialize();
+  return await throwErrorOnRejectedPromise(
+    wasm.blsCreateProofWithOutput(request),
+    "Failed to create proof"
+  );
+};
+
 module.exports.verifyProof = async (request) => {
   await initialize();
   return await throwErrorOnRejectedPromise(wasm.verifyProof(request));

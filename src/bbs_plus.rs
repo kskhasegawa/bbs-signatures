@@ -14,7 +14,7 @@
 use crate::utils::set_panic_hook;
 
 use crate::{bls12381::BbsKeyPair, BbsVerifyResponse, PoKOfSignatureProofWrapper};
-use bbs::prelude::*;
+use modified_bbs_for_PoC::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::{
     collections::{BTreeMap, BTreeSet},

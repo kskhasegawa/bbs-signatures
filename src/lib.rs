@@ -20,7 +20,7 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 #[macro_use]
 extern crate arrayref;
 
-use bbs::prelude::*;
+use modified_bbs_for_PoC::prelude::*;
 use serde::{
     de::{Error as DError, Visitor},
     Deserialize, Deserializer, Serialize, Serializer,

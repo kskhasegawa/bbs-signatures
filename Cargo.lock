@@ -44,26 +44,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bbs"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7e24ff98879bedb7fe7b3ce0c86268baca8468e8ce405d44459dbaf0b26ac9ca"
-dependencies = [
- "arrayref",
- "blake2",
- "failure",
- "ff-zeroize",
- "hex",
- "hkdf",
- "pairing-plus",
- "rand 0.7.3",
- "serde",
- "serde-wasm-bindgen",
- "wasm-bindgen",
- "zeroize",
-]
-
-[[package]]
 name = "blake2"
 version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -319,6 +299,26 @@ checksum = "0f2d26ec3309788e423cfbf68ad1800f061638098d76a83681af979dc4eda19d"
 dependencies = [
  "adler",
  "autocfg",
+]
+
+[[package]]
+name = "modified_bbs_for_PoC"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "52612ae86c515a04b84ea2b8b5c7ee0e88f3b5bd0f26cceff12bf7c3fd1a5915"
+dependencies = [
+ "arrayref",
+ "blake2",
+ "failure",
+ "ff-zeroize",
+ "hex",
+ "hkdf",
+ "pairing-plus",
+ "rand 0.7.3",
+ "serde",
+ "serde-wasm-bindgen",
+ "wasm-bindgen",
+ "zeroize",
 ]
 
 [[package]]
@@ -597,10 +597,10 @@ name = "wasm"
 version = "0.1.0"
 dependencies = [
  "arrayref",
- "bbs",
  "console_error_panic_hook",
  "hkdf",
  "js-sys",
+ "modified_bbs_for_PoC",
  "pairing-plus",
  "rand 0.7.3",
  "serde",

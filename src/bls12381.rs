@@ -14,7 +14,7 @@
 use crate::utils::set_panic_hook;
 
 use crate::{BbsVerifyResponse, PoKOfSignatureProofWrapper};
-use bbs::prelude::*;
+use modified_bbs_for_PoC::prelude::*;
 use pairing_plus::{
     bls12_381::{Bls12, Fr, G1, G2},
     hash_to_field::BaseFromRO,
@@ -29,6 +29,9 @@ use std::{
     iter::FromIterator,
 };
 use wasm_bindgen::prelude::*;
+
+use wasm_bindgen::JsValue;
+
 
 wasm_impl!(
     /// Convenience struct for interfacing with JS.
@@ -251,6 +254,72 @@ pub async fn bls_create_proof(request: JsValue) -> Result<JsValue, JsValue> {
                     let out =
                         PoKOfSignatureProofWrapper::new(request.messages.len(), &revealed, proof);
                     Ok(serde_wasm_bindgen::to_value(&out).unwrap())
+                }
+                Err(e) => Err(JsValue::from(&format!("{:?}", e))),
+            }
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct ProofResult {
+    pub proof: PoKOfSignatureProofWrapper,
+    pub challenge_hash: String,
+    pub hidden_messages: Vec<String>,
+    pub blinding_factors: Vec<String>,
+    pub correct_commit: Vec<String>,
+}
+
+#[wasm_bindgen(js_name = blsCreateProofWithOutput)]
+pub async fn bls_create_proof_with_output(request: JsValue) -> Result<JsValue, JsValue> {
+    set_panic_hook();
+    let request: BlsCreateProofRequest = request.try_into()?;
+    if request.revealed.iter().any(|r| *r > request.messages.len()) {
+        return Err(JsValue::from("revealed value is out of bounds"));
+    }
+    let pk = request.publicKey.to_public_key(request.messages.len())?;
+    let revealed: BTreeSet<usize> = BTreeSet::from_iter(request.revealed.into_iter());
+    let mut messages = Vec::new();
+    let mut hidden_messages = Vec::new();
+    for i in 0..request.messages.len() {
+        if revealed.contains(&i) {
+            messages.push(ProofMessage::Revealed(SignatureMessage::hash(
+                &request.messages[i],
+            )));
+        } else {
+            let m = ProofMessage::Hidden(HiddenMessage::ProofSpecificBlinding(
+                SignatureMessage::hash(&request.messages[i]),
+            ));
+            messages.push(ProofMessage::Hidden(HiddenMessage::ProofSpecificBlinding(
+                SignatureMessage::hash(&request.messages[i]),
+            )));
+            // hidden_messages.push(m.get_message().to_string());
+            hidden_messages.push(String::from_utf8_lossy(&request.messages[i]).to_string());
+        }
+    }
+    match PoKOfSignature::init(&request.signature, &pk, messages.as_slice()) {
+        Err(e) => return Err(JsValue::from(&format!("{:?}", e))),
+        Ok(pok) => {
+            let mut challenge_bytes = pok.to_bytes();
+            if request.nonce.is_empty() {
+                challenge_bytes.extend_from_slice(&[0u8; FR_COMPRESSED_SIZE]);
+            } else {
+                let nonce = ProofNonce::hash(&request.nonce);
+                challenge_bytes.extend_from_slice(nonce.to_bytes_uncompressed_form().as_ref());
+            }
+            let challenge_hash = ProofChallenge::hash(&challenge_bytes);
+            match pok.gen_proof_with_secrets(&challenge_hash) {
+                Ok((proof, blindings, responses)) => {
+                    let out =
+                        PoKOfSignatureProofWrapper::new(request.messages.len(), &revealed, proof);
+                    let result = ProofResult {
+                        proof: out,
+                        challenge_hash: challenge_hash.to_string(),
+                        hidden_messages: hidden_messages,
+                        blinding_factors: blindings.iter().map(|b| b.to_string()).collect(),
+                        correct_commit: responses.iter().map(|r| r.to_string()).collect(),
+                    };
+                    Ok(serde_wasm_bindgen::to_value(&result).unwrap())
                 }
                 Err(e) => Err(JsValue::from(&format!("{:?}", e))),
             }

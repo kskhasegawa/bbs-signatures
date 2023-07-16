@@ -26,7 +26,7 @@ let useWasm = !(
 
 try {
   if (!useWasm) {
-    module.exports = require("@mattrglobal/node-bbs-signatures");
+    module.exports = require("@kskhasegawa/node-bbs-signatures");
   }
 } catch {
   if (process.env.BBS_SIGNATURES_MODE === BBS_SIGNATURES_MODES.nodejs) {

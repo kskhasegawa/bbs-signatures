@@ -11,7 +11,12 @@
  * limitations under the License.
  */
 
-import { BbsCreateProofRequest, createProof, blsCreateProof } from "../../lib";
+import {
+  BbsCreateProofRequest,
+  createProof,
+  blsCreateProof,
+  blsCreateProofWithOutput,
+} from "../../lib";
 import { randomBytes } from "@stablelib/random";
 import { base64Decode, stringToBytes } from "../utilities";
 
@@ -247,9 +252,9 @@ describe("bbsSignature", () => {
         revealed: [0],
       };
 
-      const proof = await blsCreateProof(request);
-      expect(proof).toBeInstanceOf(Uint8Array);
-      expect(proof.length).toEqual(383);
+      const proof = await blsCreateProofWithOutput(request);
+      expect(proof.proof).toBeInstanceOf(Uint8Array);
+      expect(proof.proof.length).toEqual(383);
     });
 
     it("should create proof revealing all messages from multi-message signature", async () => {

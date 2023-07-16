@@ -15,7 +15,7 @@
 
 #![cfg(target_arch = "wasm32")]
 extern crate wasm_bindgen_test;
-use bbs::prelude::*;
+use modified_bbs_for_PoC::prelude::*;
 use wasm::prelude::*;
 // use wasm::log;
 use wasm_bindgen_test::*;

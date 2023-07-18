@@ -303,9 +303,9 @@ dependencies = [
 
 [[package]]
 name = "modified_bbs_for_PoC"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52612ae86c515a04b84ea2b8b5c7ee0e88f3b5bd0f26cceff12bf7c3fd1a5915"
+checksum = "db688e2a446c6807b9a79653e05dc6bee4e0afc0aa50b7521393e0b7c4262c72"
 dependencies = [
  "arrayref",
  "blake2",

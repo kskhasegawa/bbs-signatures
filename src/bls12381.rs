@@ -281,20 +281,22 @@ pub async fn bls_create_proof_with_output(request: JsValue) -> Result<JsValue, J
     let revealed: BTreeSet<usize> = BTreeSet::from_iter(request.revealed.into_iter());
     let mut messages = Vec::new();
     let mut hidden_messages = Vec::new();
+    let mut hidden_message_hash = Vec::new();
     for i in 0..request.messages.len() {
         if revealed.contains(&i) {
             messages.push(ProofMessage::Revealed(SignatureMessage::hash(
                 &request.messages[i],
             )));
         } else {
-            let m = ProofMessage::Hidden(HiddenMessage::ProofSpecificBlinding(
-                SignatureMessage::hash(&request.messages[i]),
-            ));
+            // let m = ProofMessage::Hidden(HiddenMessage::ProofSpecificBlinding(
+            //     SignatureMessage::hash(&request.messages[i]),
+            // ));
+            let m = SignatureMessage::hash(&request.messages[i]);
             messages.push(ProofMessage::Hidden(HiddenMessage::ProofSpecificBlinding(
                 SignatureMessage::hash(&request.messages[i]),
             )));
-            // hidden_messages.push(m.get_message().to_string());
             hidden_messages.push(String::from_utf8_lossy(&request.messages[i]).to_string());
+            hidden_message_hash.push(m.to_string());
         }
     }
     match PoKOfSignature::init(&request.signature, &pk, messages.as_slice()) {
@@ -316,8 +318,8 @@ pub async fn bls_create_proof_with_output(request: JsValue) -> Result<JsValue, J
                         proof: out,
                         challenge_hash: challenge_hash.to_string(),
                         hidden_messages: hidden_messages,
-                        blinding_factors: blindings.iter().map(|b| b.to_string()).collect(),
-                        correct_commit: responses.iter().map(|r| r.to_string()).collect(),
+                        blinding_factors: blindings,//blindings.iter().map(|b| b.to_string()).collect(),
+                        correct_commit: responses,//responses.iter().map(|r| r.to_string()).collect(),
                     };
                     Ok(serde_wasm_bindgen::to_value(&result).unwrap())
                 }

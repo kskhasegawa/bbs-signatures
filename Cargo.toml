@@ -16,7 +16,7 @@ default = ["wee_alloc"]
 
 [dependencies]
 arrayref = "0.3"
-modified_bbs_for_PoC = { version = "0.1.0", default-features = false, features = ["wasm"] }
+modified_bbs_for_PoC = { version = "0.1.1", default-features = false, features = ["wasm"] }
 console_error_panic_hook = { version = "0.1.1", optional = true }
 hkdf = "0.8"
 js-sys = "0.3"
